@@ -1,6 +1,5 @@
-import abc
 import textwrap
-from abc import ABC, abstractproperty, abstractmethod
+from abc import ABC, abstractmethod
 from datetime import datetime
 
 
@@ -9,7 +8,8 @@ class Cliente:
         self.endereco = endereco
         self.contas = []
 
-    def realizar_transacao(self, conta, transacao):
+    @staticmethod
+    def realizar_transacao(conta, transacao):
         transacao.registrar(conta)
 
     def adicionar_conta(self, conta):
@@ -177,8 +177,8 @@ class Deposito(Transacao):
 
 
 def menu():
-    menu = """\n
-        ***************= MENU ***************=
+    menu_inicial = """\n
+        ================ MENU ================
         || (1)\tDepositar                   ||
         || (2)\tSacar                       ||
         || (3)\tExtrato                     ||
@@ -186,9 +186,9 @@ def menu():
         || (5)\tNova conta                  ||
         || (6)\tListar contas               ||
         || (0)\tSair                        ||
-        ************************************==
+        ======================================
         >> """
-    return input(textwrap.dedent(menu))
+    return input(textwrap.dedent(menu_inicial))
 
 
 def filtrar_cliente(cpf, clientes):
@@ -253,7 +253,7 @@ def exibir_extrato(clientes):
     if not conta:
         return
 
-    print("\n***************= EXTRATO ***************=")
+    print("\n================ EXTRATO ================")
     transacoes = conta.historico.transacoes
 
     extrato = ""
@@ -265,7 +265,7 @@ def exibir_extrato(clientes):
 
     print(extrato)
     print(f"\nSaldo:\n\tR$ {conta.saldo:.2f}")
-    print("******************************************")
+    print("=" * 42)
 
 
 def criar_cliente(clientes):
@@ -292,7 +292,7 @@ def criar_conta(numero_conta, clientes, contas):
     cliente = filtrar_cliente(cpf, clientes)
 
     if not cliente:
-        print("\nXXX Cliente não encontrado, fluxo de criação de conta encerrado! XXX")
+        print("\nXXX Cliente não encontrado, operação encerrada! XXX")
         return
 
     conta = ContaCorrente.nova_conta(cliente=cliente, numero=numero_conta)
